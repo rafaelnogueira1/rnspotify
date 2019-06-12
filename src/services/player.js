@@ -3,7 +3,9 @@ import store from '~/store';
 import PlayerActions from '~/store/ducks/player';
 
 export default async () => {
-  TrackPlayer.addEventListener('remote-play', () => TrackPlayer.play());
+  TrackPlayer.addEventListener('remote-play', () => {
+    store.dispatch(PlayerActions.play());
+  });
 
   TrackPlayer.addEventListener('remote-pause', () => {
     store.dispatch(PlayerActions.pause());
