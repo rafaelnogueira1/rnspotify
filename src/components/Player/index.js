@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import PlayerActions from '~/store/ducks/player';
 
 import {
   Container,
@@ -11,28 +14,42 @@ import {
   ControlIcons,
 } from './styles';
 
-const Player = () => (
-  <Container>
-    <CoverBackground source={{ uri: 'https://s3-sa-east-1.amazonaws.com/gonative/cover3.png' }} />
-    <EpisodeInfo>
-      <Title>Papercut</Title>
-      <Author>Linkin Park</Author>
-    </EpisodeInfo>
+const Player = ({
+  player, currentEpisode, play, pause, prev, next,
+}) => player.current && (
+<Container>
+  <CoverBackground source={{ uri: currentEpisode.artwork }} />
+  <EpisodeInfo>
+    <Title>{currentEpisode.title}</Title>
+    <Author>{currentEpisode.artist}</Author>
+  </EpisodeInfo>
 
-    <Controls>
-      <ControlButton onPress={() => {}}>
-        <ControlIcons name="skip-previous" />
-      </ControlButton>
+  <Controls>
+    <ControlButton onPress={prev}>
+      <ControlIcons name="skip-previous" />
+    </ControlButton>
 
-      <ControlButton onPress={() => {}}>
-        <ControlIcons name="play-circle-filled" />
-      </ControlButton>
+    <ControlButton onPress={player.playing ? pause : play}>
+      <ControlIcons name={player.playing ? 'pause-circle-filled' : 'play-circle-filled'} />
+    </ControlButton>
 
-      <ControlButton onPress={() => {}}>
-        <ControlIcons name="skip-next" />
-      </ControlButton>
-    </Controls>
-  </Container>
+    <ControlButton onPress={next}>
+      <ControlIcons name="skip-next" />
+    </ControlButton>
+  </Controls>
+</Container>
 );
 
-export default Player;
+const mapStateToProps = state => ({
+  player: state.player,
+  currentEpisode: state.player.podcast
+    ? state.player.podcast.tracks.find(episode => episode.id === state.player.current)
+    : null,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators(PlayerActions, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Player);

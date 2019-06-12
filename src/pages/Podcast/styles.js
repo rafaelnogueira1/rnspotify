@@ -60,14 +60,14 @@ export const Episode = styled.TouchableOpacity`
 `;
 
 export const Author = styled.Text`
-  font-size: 16px;
-  color: #fff;
-`;
-
-export const Title = styled.Text`
   color: #c4c4c4;
   font-size: 14px;
   margin-top: 3px;
+`;
+
+export const Title = styled.Text`
+  font-size: 16px;
+  color: ${props => (props.active ? '#1db954' : '#fff')};
 `;
 
 export const BackButton = styled.TouchableOpacity.attrs({
